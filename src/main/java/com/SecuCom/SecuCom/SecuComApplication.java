@@ -55,7 +55,27 @@ public class SecuComApplication   {
 
         };
     }
+/*return  args -> {
+        Role r1=userService.saveRole(new Role(1L,"ROLE_USER"));
+        Role r2=userService.saveRole(new Role(2L,"ROLE_ADMIN"));
 
+
+        if(userService.getUser("john")==null){
+            User u1=userService.saveUser(new User(null, "John Travolta", "john","1234",new ArrayList<>()));
+        }
+
+        if(userService.getUser("Kim")==null){
+            User u2=userService.saveUser(new User(null, "Kim Kardashian", "Kim","1234",new ArrayList<>()));
+        }
+
+        if(userService.getUser("will")==null){
+            User u3=userService.saveUser(new User(null, "Will Smith", "will","1234",new ArrayList<>()));
+        }
+
+        userService.addRoleToUser("john",r1.getNom());
+        userService.addRoleToUser("Kim", r2.getNom());
+        userService.addRoleToUser("will", r1.getNom());
+    }*/
 
     @Bean
     public PasswordEncoder passwordEncoder()

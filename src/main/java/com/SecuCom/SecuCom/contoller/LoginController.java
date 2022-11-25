@@ -49,12 +49,11 @@ public class LoginController {
                 .map(StandardClaimAccessor::getEmail)
                 .orElse(authentication.getName());
     }
-    @GetMapping("/public")
-    public String publicPage(){
-        return "Hello!";
-    }
-    @GetMapping("/private")
-    public String privatePage(){
-        return "this page is private!";
-    }
+  private OidcIdToken getidToken(OAuth2User principal){
+        if (principal instanceof DefaultOidcUser){
+            DefaultOidcUser oidcUser = (DefaultOidcUser) principal;
+            return oidcUser.getIdToken();
+        }
+        return null;
+  }
 }

@@ -47,19 +47,30 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+       // http.csrf().disable();
+        http.authorizeRequests()
+                .antMatchers("ADMIN").hasAnyRole("ADMIN")
+                .antMatchers("USER").hasAnyRole("USER")
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .and()
+                .oauth2Login();
+
+
+
       /*  http.headers().frameOptions().disable();
         http.authorizeRequests().anyRequest().permitAll();*/
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        /*http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.headers().frameOptions().disable();
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/addUser/**").hasAuthority("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.GET,"/Afficher/**").hasAuthority("USER");
         http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
-       //  http.formLogin();
+        http.formLogin();
         http.authorizeRequests().anyRequest().authenticated();
 
         http.addFilter(new JwtAuthentificationFilter(authenticationManagerBean()));
-        http.addFilterBefore(new JwtAuthentificationFilter(authenticationManagerBean()),UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthentificationFilter(authenticationManagerBean()),UsernamePasswordAuthenticationFilter.class);*/
     }
 
 }
