@@ -20,10 +20,10 @@ public class Utilisateur {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 
-    private String Password;
+    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
 
     @ManyToMany
-    private Collection<Role> roles = new ArrayList<>();
+    private Collection<Role> role = new ArrayList<>();
 }

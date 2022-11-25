@@ -4,6 +4,7 @@ import com.SecuCom.SecuCom.configuration.filter.JwtAuthentificationFilter;
 import com.SecuCom.SecuCom.models.Utilisateur;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,7 +36,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
                 Utilisateur utilisateur = utilisateurService.donnerUserByUsername(username);
                 Collection<GrantedAuthority> authorities = new ArrayList<>();
-                utilisateur.getRoles().forEach(role -> {
+                utilisateur.getRole().forEach(role -> {
                     authorities.add(new SimpleGrantedAuthority(role.getRolename()));
                 });
                 return new User(utilisateur.getUsername(), utilisateur.getPassword(), authorities);
@@ -43,15 +44,22 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         });
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
+      /*  http.headers().frameOptions().disable();
+        http.authorizeRequests().anyRequest().permitAll();*/
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.headers().frameOptions().disable();
-        http.authorizeRequests().antMatchers("/he-console/**").permitAll();
-        //  http.formLogin();
+        http.authorizeRequests().antMatchers(HttpMethod.POST,"/addUser/**").hasAuthority("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/Afficher/**").hasAuthority("USER");
+        http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
+       //  http.formLogin();
         http.authorizeRequests().anyRequest().authenticated();
+
         http.addFilter(new JwtAuthentificationFilter(authenticationManagerBean()));
-        http.addFilterBefore(new JwtAuthentificationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthentificationFilter(authenticationManagerBean()),UsernamePasswordAuthenticationFilter.class);
     }
+
 }

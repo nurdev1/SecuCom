@@ -1,7 +1,9 @@
 package com.SecuCom.SecuCom.service.Implementation;
 
 import com.SecuCom.SecuCom.service.UtilisateurService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserDetailServImple  {
     private UtilisateurService utilisateurService;
 

@@ -45,13 +45,19 @@ public class JwtAuthentificationFilter extends UsernamePasswordAuthenticationFil
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles",user.getAuthorities().stream().map(ga ->ga.getAuthority()).collect(Collectors.toList()))
                 .sign(algo1);
+
+        String jwtRefreshTokenToken= JWT.create()
+                .withSubject(user.getUsername())
+                .withExpiresAt(new Date(System.currentTimeMillis()+5*600+1000))
+                .withIssuer(request.getRequestURL().toString())
+                .sign(algo1);
         Map<String,String> idToken= new HashMap<>();
         idToken.put("access-token",jwtAccessToken);
-        idToken.put("refresh_token",jwtAccessToken);
+        idToken.put("refresh_token",jwtRefreshTokenToken);
         response.setContentType("application/json");
         new ObjectMapper().writeValue(response.getOutputStream(),idToken);
         response.setHeader("Authorisation",jwtAccessToken);
-
-     //   super.successfulAuthentication(request,response,chain,authResult);
+        response.setHeader("Authorization",jwtAccessToken);
+        //   super.successfulAuthentication(request,response,chain,authResult);
     }
 }
