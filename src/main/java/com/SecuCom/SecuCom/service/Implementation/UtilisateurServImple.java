@@ -4,20 +4,25 @@ import com.SecuCom.SecuCom.service.UtilisateurService;
 import lombok.AllArgsConstructor;
 import com.SecuCom.SecuCom.models.Role;
 import com.SecuCom.SecuCom.models.Utilisateur;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.SecuCom.SecuCom.repository.RoleRepository;
 import com.SecuCom.SecuCom.repository.UtilisateurRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @AllArgsConstructor
 @Service
-//@Transactional
+@Transactional
 public class UtilisateurServImple implements UtilisateurService {
 
+    @Autowired
     private final UtilisateurRepository utilisateurRepository;
+    @Autowired
     private final RoleRepository roleRepository;
+    @Autowired
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -33,22 +38,12 @@ public class UtilisateurServImple implements UtilisateurService {
         return utilisateurRepository.findByUsername(username);
     }
 
-    @Override
-    public Utilisateur modifier(String userName, String password) {
-        return null;
-    }
-
-    @Override
-    public String Sedeconnecter(Utilisateur utilisateur) {
-        return null;
-    }
 
     @Override
     public String seConnecter(String username, String password) {
         if (utilisateurRepository.existsByUsername(username) && utilisateurRepository.existsByPassword(password)) {
             return "Connecter avec succès";
         }
-        ;
         if (utilisateurRepository.existsByUsername(username) == false) {
             return "nom utilisateur non trouver";
         }
@@ -67,9 +62,9 @@ public class UtilisateurServImple implements UtilisateurService {
     }
 
     @Override
-    public void addRoleToUser(String username, String roleName) {
+    public void addRoleToUser(String username, String rolename) {
         Utilisateur utilisateur = utilisateurRepository.findByUsername(username);
-        Role role = roleRepository.findByRolename(roleName);
+        Role role = roleRepository.findByRolename(rolename);
         utilisateur.getRole().add(role);
 
     }

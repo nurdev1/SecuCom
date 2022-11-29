@@ -21,9 +21,9 @@ public class Utilisateur {
     private Long id;
     private String username;
 
-    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> role = new ArrayList<>();
 }

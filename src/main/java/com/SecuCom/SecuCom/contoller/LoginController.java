@@ -1,12 +1,12 @@
 package com.SecuCom.SecuCom.contoller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.StandardClaimAccessor;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,26 +14,27 @@ import javax.annotation.security.RolesAllowed;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/Login")
+@AllArgsConstructor
+@RequestMapping("/login")
 
 public class LoginController {
 
-    @RequestMapping("/**")
     @RolesAllowed("USER")
+    @RequestMapping("/*")
     public String getUser(Authentication authentication){
         return "welcome "+authentication.getName();
     }
 
     @RequestMapping("/admin")
-    @RolesAllowed("ADMIN")
+    @RolesAllowed({"USER","ADMIN"})
     public String getAdmin(Authentication authentication){
         return "welcome "+authentication.getName();
     }
 
-    @RequestMapping("/*")
-    public String getGithub(){
-        return "welcome, GitHub User";
-    }
+  /*  @RequestMapping("/*")
+    public String getGithub(Authentication authentication){
+        return "welcome, "+authentication.getName()+ "connecter avec github";
+    }*/
     private OidcIdToken getIdToken(OAuth2User principal){
         if (principal instanceof DefaultOidcUser){
             DefaultOidcUser oidcUser = (DefaultOidcUser) principal;
